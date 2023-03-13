@@ -1,0 +1,278 @@
+@import './palette.scss';
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=La+Belle+Aurore&family=Noto+Sans+TC:wght@100;300;400;500;700;900&display=swap');
+
+$breakpoint-tablet: 870px;
+$narrow: 800px;
+$breakpoint-laptop:1200px;
+$breakpoint-mobile:600px;
+$radius:(
+    "small":3px,
+    "regular":12px,
+    "medium":2rem,
+    "round":50%
+);
+$colors:$flax,$yellow-green,$columbia-blue,$parchment,$light-coral,$bittersweet-shimmer;
+$repeat:7;
+@mixin row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+@mixin column{
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin removeA{
+    text-decoration: none;
+    display: block;
+    color: $licorice;
+}
+@mixin center{
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    align-self: center;
+    justify-self: center;
+    margin: 0 auto;
+}
+
+*{
+    // border:  1px solid red;
+    box-sizing: border-box;
+}
+// fonts style
+h2,h3,h4,h5,h6,p,a,button,input,textarea,span,mark,small,label{
+    font-family: 'Noto Sans TC',Arial, sans-serif;
+    color: $licorice;
+}
+
+h1 a,.logo{
+    @include removeA;
+    font-family: 'Fredoka One', cursive, sans-serif;
+    letter-spacing: 1.5px;
+}
+h1,h2{
+    text-align: center;
+}
+h2{
+    font-size: xx-large;
+}
+p{
+    font-weight: 300;
+    line-height: 1.5;
+}
+.signature{
+    font-family: 'La Belle Aurore', cursive;
+    font-size: xx-large;
+}
+
+body{
+margin: 0;
+}
+
+// overall layout
+main{
+    width: 100%;
+    max-width: 110ch;
+    margin: 1.5rem auto;
+    padding: 2rem;
+    
+}
+
+header{
+    @include row;
+    justify-content: space-between;
+    padding: 0rem 1rem;
+}
+nav{
+    @include row;
+}
+nav a{
+    @include removeA;
+}
+main#About{
+    border: 1px solid $licorice;
+    border-radius: map-get($map: $radius, $key: regular);
+    
+}
+.App>footer{
+    padding: 1rem;
+    @include row;
+    & #attributes{
+        @include column;
+    }
+}
+form{
+    
+    & label{
+        display: block;
+        font-size: small;
+    }
+    & input,textarea{
+        width: 100%;
+        padding: .5rem 1rem;
+        margin-bottom: .5rem;
+    }
+}
+// classes for general layout
+.grid{
+    display: grid;
+}
+.flex{
+    display: flex;
+}
+.row{
+    @include row;
+}
+.row .group{
+    @include row;
+}
+
+
+// components
+.avatar{
+    width: clamp(5rem,10vw,10rem);
+    height: clamp(5rem,10vw,10rem);
+    border-radius: map-get($map: $radius, $key: round);
+}
+.btn{
+    display: block;
+    background-color: $licorice;
+    color: $parchment;
+    padding: .5rem 2rem;
+    width: 100%;
+    margin: .5rem auto;
+    cursor: pointer;
+}
+
+// Layout for specific page
+/*---------gallery page--------*/
+main#gallery .grid{
+    grid-template-columns: repeat(auto-fill,minmax(130px,1fr));
+    gap: 1rem;
+}
+.breed{
+    position: relative;
+    @for $i from 0 through $repeat {
+        &:nth-child(#{length($colors)}n+#{$i})  {
+           background: lighten(nth($colors, random(length($colors))), 0%);
+           
+       }
+   }
+
+}
+
+main#gallery .breed img{
+    width: 100%;
+    height: auto;
+}
+main#gallery{ 
+    & .breed li{
+    display: flex;
+    position: absolute;
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+    &:hover{
+        opacity: 1;
+    }
+    & span{
+        @include center;
+        color: $parchment;
+        text-transform: capitalize;
+        font-size: large;
+    }
+    }
+}
+
+
+/*---------about page--------*/
+main#About footer{
+    @include row;
+}
+/*---------resources page--------*/
+main#resources {
+    & .grid{
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 2rem 0;
+       }
+    & .block{
+        outline: 2px solid $licorice;
+        border-radius: map-get($map: $radius, $key: regular);
+        padding: 1rem 2rem;
+        &  ul{
+            padding: 0;
+            margin: .5rem 0;
+            & li{
+                list-style: none;
+                font-size: small;
+                margin: 0;
+                & a{
+                    @include removeA;
+                    color: $bittersweet-shimmer;
+                    &:hover{
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+        & h3{
+            margin: .5rem 0;
+        }
+    }
+}
+
+
+
+
+/*---------breed page--------*/
+.App:has(> main#breed){
+    background: lighten(nth($colors, random(length($colors))), 0%);
+}
+main#breed{
+    @include row;
+}
+
+
+/*---------contact page--------*/
+
+main#contact{
+    @include row;
+    & h2{
+        font-size: 4.5rem;
+        margin: 1.5rem 0px;
+    }
+    & .group{
+        min-width: 40%;
+        padding: 2rem;
+    }
+}
+
+// Responsiveness
+@media screen and (max-width:$breakpoint-tablet) {
+    main#resources,main#contact,main#breed{
+        @include column;
+    }
+    main#contact .group{
+        width: 100%;
+    }
+}
+@media screen and (max-width:$breakpoint-mobile) {
+    header,.App>footer{
+        @include column;
+        text-align: center;
+    }
+    main#resources .grid{
+        grid-template-columns: 1fr;
+    }
+}
+
+
