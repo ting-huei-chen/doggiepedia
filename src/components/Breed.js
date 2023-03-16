@@ -6,6 +6,8 @@ function Breed(){
     const [ result,setResult ] = useState({});
     let strip = name.replaceAll("-"," ");
     // console.log({"name":strip});
+
+
     useEffect(() => {
         // data fetching here
     var myHeaders = new Headers();
@@ -16,22 +18,29 @@ function Breed(){
     headers: myHeaders,
     redirect: 'follow'
     };
-
+    
     fetch(`https://api.api-ninjas.com/v1/dogs?name=${strip}`, requestOptions)
     .then(response => response.text())
     .then(data => {
         // match entire string
-        const regex = new RegExp(`\\b^${strip}\\b`, 'gi')
+
         const arr= JSON.parse(data);
-        arr.forEach(element => {
+        if(arr.length>1){   
+            const regex = new RegExp(`\\b^${strip}\\b`, 'gi')
+            arr.forEach(element => {
             if(element.name.match(regex)){
                 setResult(element);
             }
         });
+        }else{
+            setResult(arr[0]);
+        }
+        
+        
         
     })
     .catch(error => console.log('error', error));
-    console.log({"result":result});
+    // console.log({"result":result});
     
 }, []);
     const childrenRate = result.good_with_children;
@@ -45,17 +54,19 @@ function Breed(){
         let remain = 5-parseInt(num);
         let arr=[];
         for(let i = 0; i <num; i++){
-            arr.push(<div className='fill points'>1</div>);
+            
+            arr.push(<div className='fill points' key={`star-${i}`}></div>);
         }
         for(let i = 0; i <remain; i++){
-            arr.push(<div className='points'>0</div>);
+            arr.push(<div className='points' key={`nostar-${i}`}></div>);
         }
         return(arr);
     }
-    
+    var numOfBar=0
     function visualizeBar(num){
         let level = parseInt(num);
-        return(<span className={`w-${level}`}></span>);
+        numOfBar++;
+        return(<span className={`w-${level}`} key={`bar-${numOfBar}`}></span>);
     }
     const shed = visualizeDot(result.shedding);
     return (
@@ -69,8 +80,8 @@ function Breed(){
                 {/* labels */}
                 <div className='row'>
                 
-                {childrenRate>3 ? <mark>good_with_children</mark> : ""}
-                {socializeRate>3 ? <mark>good_with_other_dogs</mark> : ""}
+                {childrenRate>3 ? <mark>Good with children</mark> : ""}
+                {socializeRate>3 ? <mark>Good with other dogs</mark> : ""}
                 {trainability>3 ? <mark>Easy to train</mark> : ""}
                 
                     
@@ -112,12 +123,12 @@ function Breed(){
                 </div>
 
                 <div className='flex'>
-                    <div className='row'>
+                    <div className='row data-block'>
                         <h5>Min Height</h5>
                         {/* return num */}
                         <p><span className='display__num'>{minHeightF}</span> in</p>
                     </div>
-                    <div className='row'>
+                    <div className='row data-block'>
                         <h5>Min Weight</h5>
                         {/* return num */}
                         <p><span className='display__num'>{minWeightF}</span> lbs</p>

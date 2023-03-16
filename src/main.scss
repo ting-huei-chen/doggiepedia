@@ -63,6 +63,12 @@ p{
     font-weight: 300;
     line-height: 1.5;
 }
+ul{
+    padding: 0;
+    & li{
+        list-style: none;
+    }
+}
 .signature{
     font-family: 'La Belle Aurore', cursive;
     font-size: xx-large;
@@ -84,7 +90,7 @@ main{
 header{
     @include row;
     justify-content: space-between;
-    padding: 0rem 1rem;
+    padding: 0rem 2rem;
 }
 nav{
     @include row;
@@ -99,7 +105,14 @@ main#About{
 }
 .App>footer{
     padding: 1rem;
+    justify-content: space-evenly;
+
+    gap: 2rem;
     @include row;
+    background-color: $flax;
+    // & *{
+    //     color: $parchment;
+    // }
     & #attributes{
         @include column;
     }
@@ -146,6 +159,55 @@ form{
     margin: .5rem auto;
     cursor: pointer;
 }
+.points{
+    width: 15px;
+    height: 15px;
+    outline: solid 1px $licorice;
+    border-radius: map-get($map: $radius, $key:round);
+}
+.fill{
+    background-color: $licorice;
+    transition: background-color .5s ease-in-out;
+    animation: pointFill 2s;
+}
+.bar{
+    // width: 100%;
+    min-width: 150px;
+    height: 15px;
+    outline: solid 1px $licorice;
+    // temp
+    border-radius: 15px;
+    transition: width .5s ease-in-out;
+    & *{
+        display: block;
+        height: 100%;
+        background-color: $licorice;
+        border-radius: 15px;
+        animation: barLoad 3s;
+    }
+    & .w-5{
+        width: 100%;
+    }
+    & .w-4{
+        width: 80%;
+    }
+    & .w-3{
+        width: 60%;
+    }
+    & .w-2{
+        width: 40%;
+    }
+    & .w-1{
+        width: 20%;
+    }
+}
+mark{
+    padding: .25rem .5rem;
+    font-size: small;
+    background-color: $licorice;
+    border-radius: map-get($map: $radius, $key: small);
+    color: $parchment;
+}
 
 // Layout for specific page
 /*---------gallery page--------*/
@@ -155,6 +217,7 @@ main#gallery .grid{
 }
 .breed{
     position: relative;
+    
     @for $i from 0 through $repeat {
         &:nth-child(#{length($colors)}n+#{$i})  {
            background: lighten(nth($colors, random(length($colors))), 0%);
@@ -239,6 +302,33 @@ main#resources {
 }
 main#breed{
     @include row;
+    padding-top: 0;
+    & .wrap{
+        &>.row{
+            margin-top: 1rem;
+        }
+        h3{
+            font-size: medium;
+            margin: .5rem 0;
+        }
+        // width: 50%;
+        & .row,.flex{
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        
+        & .data-block{
+            outline: solid $licorice 2px;
+            border-radius: map-get($map: $radius, $key: small);
+            flex-grow:1;
+            padding: 0 1rem;
+            margin-top:1rem;
+        }
+        & .display__num{
+            font-size: x-large;
+            font-weight: 600
+        }
+    }
 }
 
 
@@ -269,9 +359,23 @@ main#contact{
     header,.App>footer{
         @include column;
         text-align: center;
+        
     }
     main#resources .grid{
         grid-template-columns: 1fr;
+    }
+}
+
+/*--------- Animation  ---------*/
+@keyframes barLoad {
+    from{
+        width: 0%;
+    }
+}
+
+@keyframes pointFill {
+    from{
+        background-color: unset;
     }
 }
 

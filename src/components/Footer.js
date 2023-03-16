@@ -5,7 +5,7 @@ function Footer(){
         <footer>
             <div id='site__informations'>
                 <div className='logo'>Doggiepedia</div>
-                <small>Website built by <a href='https://www.lihoworld.com'>Lihoword</a></small>
+                <small>Website built by <a href='https://www.lihoworld.com' target="_blank">Lihoword</a></small>
             </div>
             <div id='links'>
                 <h4>Useful Links</h4>
