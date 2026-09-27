@@ -6,7 +6,7 @@ function About(){
             <h2>About</h2>
             <p>Welcome to Doggiepedia, the ultimate graphic-based dog breed guide! As a dog lover and owner, I understand how important it is to have accurate and easy-to-understand information about different dog breeds. That's why I created Doggiepedia, a comprehensive guide that features 30 different dog breeds.</p>
 
-            <p>To ensure the accuracy of the information presented, Doggiepedia uses APIs from reliable sources. This allows me to deliver up-to-date and reliable information to dog enthusiasts around the world. Whether you're a seasoned dog owner or just starting to learn about dogs, Doggiepedia has something for everyone.</p>
+            <p>To keep the information trustworthy, the breed data in Doggiepedia comes from the API Ninjas dog database. Whether you're a seasoned dog owner or just starting to learn about dogs, Doggiepedia has something for everyone.</p>
 
             <p>As a one-man team, I am committed to providing the best possible user experience for visitors to Doggiepedia. I have designed the site to be intuitive and easy to navigate, with a clean and modern interface that makes finding information about different dog breeds a breeze.</p>
 
