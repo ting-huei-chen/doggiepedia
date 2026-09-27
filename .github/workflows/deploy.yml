@@ -8,6 +8,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -16,8 +18,9 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: pages-${{ github.ref }}
+  # Never cancel an in-flight Pages deployment; superseded PR builds are fine to drop.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -32,6 +35,8 @@ jobs:
 
       - run: npm ci
 
+      - run: npm test -- --watchAll=false
+
       # CI=true makes react-scripts promote lint warnings into build errors.
       - run: npm run build
         env:
@@ -43,6 +48,8 @@ jobs:
 
   deploy:
     needs: build
+    # Pull requests validate the build only. Publishing happens on main.
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
