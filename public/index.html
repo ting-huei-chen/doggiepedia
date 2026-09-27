@@ -2,12 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!--
+      Decoder for the 404.html redirect shim. GitHub Pages cannot rewrite deep
+      links to index.html, so 404.html encodes the requested path into a query
+      string and this restores it before React Router reads the URL. Must stay
+      ahead of the bundle. See https://github.com/rafgraph/spa-github-pages
+    -->
+    <script type="text/javascript">
+      (function(l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search.slice(1).split("&").map(function(s) {
+            return s.replace(/~and~/g, "&")
+          }).join("?");
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+        }
+      }(window.location))
+    </script>
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="A friendly illustrated guide to 30 dog breeds, made to encourage adoption."
     />
     <!-- <link rel="stylesheet" href="../dist/css/main.min.css" /> -->
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
@@ -25,7 +41,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Doggiepedia</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

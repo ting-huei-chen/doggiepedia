@@ -13,7 +13,7 @@ function About(){
             <p>Thank you for choosing Doggiepedia as your go-to resource for all things dog-related. If you have any questions or feedback, please feel free to contact me through the website. Happy browsing!</p>
             <footer>
             
-                <img src='images/avatar.jpg' width="100" height={100} className='avatar'/>
+                <img src={process.env.PUBLIC_URL + "/images/avatar.jpg"} width="100" height={100} className="avatar" alt="Ting.C"/>
                 <p className='signature'>Ting.C</p>
             </footer>
         </main>
