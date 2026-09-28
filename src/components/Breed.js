@@ -1,59 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate,Link,useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import breeds from '../data/breeds.json';
 
 function Breed(){
     const { name } = useParams();
-    const [ result,setResult ] = useState({});
-    let strip = name.replaceAll("-"," ");
-    // console.log({"name":strip});
 
+    // Stats come from src/data/breeds.json, a snapshot of the API Ninjas dogs API
+    // (see scripts/fetch-breeds.mjs). Serving them statically keeps the deployed
+    // site free of an API key and free of a network round-trip per page view.
+    const result = breeds.find((breed) => breed.slug === name);
 
-    useEffect(() => {
-        // data fetching here
-    var myHeaders = new Headers();
-    myHeaders.append("X-Api-Key", "YOUR_API_KEY");
+    if(!result){
+        return (
+            <main id='breed'>
+                <div className='wrap'>
+                    <h2>Breed not found</h2>
+                    <p>We don't have a page for "{name.replaceAll("-"," ")}" yet.</p>
+                </div>
+            </main>
+        )
+    }
 
-    var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-    };
-    
-    fetch(`https://api.api-ninjas.com/v1/dogs?name=${strip}`, requestOptions)
-    .then(response => response.text())
-    .then(data => {
-        // match entire string
-
-        const arr= JSON.parse(data);
-        if(arr.length>1){   
-            const regex = new RegExp(`\\b^${strip}\\b`, 'gi')
-            arr.forEach(element => {
-            if(element.name.match(regex)){
-                setResult(element);
-            }
-        });
-        }else{
-            setResult(arr[0]);
-        }
-        
-        
-        
-    })
-    .catch(error => console.log('error', error));
-    // console.log({"result":result});
-    
-}, []);
     const childrenRate = result.good_with_children;
     const socializeRate = result.good_with_other_dogs;
     const trainability = result.trainability;
-    const lifeSpan  =(result.max_life_expectancy+result.min_life_expectancy)/2;
     const minHeightF = result.min_height_female;
     const minWeightF = result.min_weight_female;
 
+    // Guard the average so a gap in the snapshot shows a dash instead of NaN.
+    const hasLifeSpan = result.min_life_expectancy != null && result.max_life_expectancy != null;
+    const lifeSpan = hasLifeSpan
+        ? (result.max_life_expectancy + result.min_life_expectancy)/2
+        : null;
+
     function visualizeDot(num){
-        let remain = 5-parseInt(num);
+        let filled = parseInt(num) || 0;
+        let remain = 5-filled;
         let arr=[];
-        for(let i = 0; i <num; i++){
+        for(let i = 0; i <filled; i++){
             
             arr.push(<div className='fill points' key={`star-${i}`}></div>);
         }
@@ -64,16 +47,15 @@ function Breed(){
     }
     var numOfBar=0
     function visualizeBar(num){
-        let level = parseInt(num);
+        let level = parseInt(num) || 0;
         numOfBar++;
         return(<span className={`w-${level}`} key={`bar-${numOfBar}`}></span>);
     }
-    const shed = visualizeDot(result.shedding);
     return (
         <main id='breed'>
         
             <div className='imgBox'>
-                <img src={"../images/"+name+".png"} width={300}/>
+                <img src={process.env.PUBLIC_URL + "/images/" + name + ".png"} width={300} alt={result.name}/>
             </div>
             <div className='wrap'>
                 <h2>{result.name}</h2>
@@ -119,19 +101,19 @@ function Breed(){
                 <div className='row'>
                     <h3>Life span</h3>
                     {/* return num */}
-                    <p><span className='display__num'>{lifeSpan}</span> years</p>
+                    <p><span className='display__num'>{hasLifeSpan ? lifeSpan : "—"}</span> years</p>
                 </div>
 
                 <div className='flex'>
                     <div className='row data-block'>
                         <h5>Min Height</h5>
                         {/* return num */}
-                        <p><span className='display__num'>{minHeightF}</span> in</p>
+                        <p><span className='display__num'>{minHeightF ?? "—"}</span> in</p>
                     </div>
                     <div className='row data-block'>
                         <h5>Min Weight</h5>
                         {/* return num */}
-                        <p><span className='display__num'>{minWeightF}</span> lbs</p>
+                        <p><span className='display__num'>{minWeightF ?? "—"}</span> lbs</p>
                     </div>
                 </div>
 
